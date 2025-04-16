@@ -1,9 +1,14 @@
 import { prisma } from "@/lib/prisma"
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 
-// DELETE: Hapus siswa berdasarkan ID
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
-    const id = Number(params.id)
+interface RouteContext {
+    params: {
+        id: string
+    }
+}
+
+export async function DELETE(request: Request, context: RouteContext) {
+    const id = Number(context.params.id)
 
     if (!id || isNaN(id)) {
         return NextResponse.json({ error: "ID tidak valid" }, { status: 400 })
