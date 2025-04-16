@@ -1,10 +1,8 @@
 import { prisma } from "@/lib/prisma";
 
-export async function DELETE(
-    req: Request,
-    context: { params: { id: string } }
-): Promise<Response> {
-    const id = Number(context.params.id);
+// DELETE: Hapus siswa berdasarkan ID
+export async function DELETE(req: Request, { params }: { params: { id: string } }): Promise<Response> {
+    const id = Number(params.id);
 
     if (!id || isNaN(id)) {
         return new Response(
@@ -18,7 +16,7 @@ export async function DELETE(
             where: { id },
         });
 
-        return new Response(JSON.stringify(deleted));
+        return new Response(JSON.stringify(deleted), { status: 200 });
     } catch (error) {
         console.error("Gagal menghapus siswa:", error);
         return new Response(
