@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from "@/lib/prisma";
 
 // GET: Ambil semua siswa
@@ -31,17 +32,17 @@ export async function POST(req: Request) {
 }
 
 // PUT: Update siswa
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     try {
-        const { id, name, phone, address, hobby } = await req.json();
+        const id = Number(params.id);
+        const { name, phone, address, hobby } = await req.json();
 
-        if (!id || !name || !phone || !address || !hobby) {
+        if (!name || !phone || !address || !hobby) {
             return NextResponse.json({ error: "Semua field harus diisi." }, { status: 400 });
         }
 
-        // Check if the student exists
         const existingStudent = await prisma.student.findUnique({
-            where: { id: Number(id) },
+            where: { id },
         });
 
         if (!existingStudent) {
@@ -49,7 +50,7 @@ export async function PUT(req: Request) {
         }
 
         const updated = await prisma.student.update({
-            where: { id: Number(id) },
+            where: { id },
             data: { name, phone, address, hobby },
         });
 
