@@ -1,4 +1,4 @@
-import { Student } from "@/app/generated/prisma";
+import { Student } from "@prisma/client";
 import { useState } from "react";
 
 interface EditModalProps {

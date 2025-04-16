@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Student } from "@/app/generated/prisma";
 import { formatDate } from "@/lib/utils";
 import EditModal from "./edit-modal"; // Pastikan EditModal sudah ada
 import { IoPencil } from "react-icons/io5";
 import { DeletButton } from "./button"; // Pastikan DeletButton sudah diimpor dengan benar
+import { Student } from "@prisma/client";
 
 export function DataViewLayout() {
   const [data, setData] = useState<Student[]>([]);

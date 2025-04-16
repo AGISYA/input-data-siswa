@@ -1,7 +1,17 @@
-import { PrismaClient } from "@/app/generated/prisma";
+// lib/prisma.ts
+import { PrismaClient } from "@prisma/client";
 
-const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+// Mendeklarasikan variabel global untuk Prisma Client di lingkungan pengembangan
+declare global {
+    var prisma: PrismaClient | undefined;
+}
 
-export const prisma = globalForPrisma.prisma || new PrismaClient();
+// Membuat instance Prisma Client yang akan digunakan di seluruh aplikasi
+const prisma = globalThis.prisma || new PrismaClient();
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Hanya di lingkungan pengembangan, kita akan menyimpan instance Prisma di variabel global
+if (process.env.NODE_ENV !== "production") {
+    globalThis.prisma = prisma;
+}
+
+export { prisma };
