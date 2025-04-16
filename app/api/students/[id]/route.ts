@@ -1,14 +1,16 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
 
 export async function DELETE(
-    _req: Request,
+    req: Request,
     context: { params: { id: string } }
 ): Promise<Response> {
     const id = Number(context.params.id);
 
     if (!id || isNaN(id)) {
-        return NextResponse.json({ error: "ID tidak valid" }, { status: 400 });
+        return new Response(
+            JSON.stringify({ error: "ID tidak valid" }),
+            { status: 400 }
+        );
     }
 
     try {
@@ -16,11 +18,11 @@ export async function DELETE(
             where: { id },
         });
 
-        return NextResponse.json(deleted);
+        return new Response(JSON.stringify(deleted));
     } catch (error) {
         console.error("Gagal menghapus siswa:", error);
-        return NextResponse.json(
-            { error: "Gagal menghapus data" },
+        return new Response(
+            JSON.stringify({ error: "Gagal menghapus data" }),
             { status: 500 }
         );
     }

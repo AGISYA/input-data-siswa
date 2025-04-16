@@ -39,6 +39,15 @@ export async function PUT(req: Request) {
             return NextResponse.json({ error: "Semua field harus diisi." }, { status: 400 });
         }
 
+        // Check if the student exists
+        const existingStudent = await prisma.student.findUnique({
+            where: { id: Number(id) },
+        });
+
+        if (!existingStudent) {
+            return NextResponse.json({ error: "Siswa tidak ditemukan." }, { status: 404 });
+        }
+
         const updated = await prisma.student.update({
             where: { id: Number(id) },
             data: { name, phone, address, hobby },
