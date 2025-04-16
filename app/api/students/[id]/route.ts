@@ -1,14 +1,12 @@
 import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
 
 // DELETE: Hapus siswa berdasarkan ID
-export async function DELETE(req: Request, { params }: { params: { id: string } }): Promise<Response> {
-    const id = Number(params.id);
+export async function DELETE(req: Request, context: { params: { id: string } }): Promise<Response> {
+    const id = Number(context.params.id); // Mengakses ID dari context.params
 
     if (!id || isNaN(id)) {
-        return new Response(
-            JSON.stringify({ error: "ID tidak valid" }),
-            { status: 400 }
-        );
+        return NextResponse.json({ error: "ID tidak valid" }, { status: 400 });
     }
 
     try {
@@ -16,11 +14,11 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
             where: { id },
         });
 
-        return new Response(JSON.stringify(deleted), { status: 200 });
+        return NextResponse.json(deleted); // Mengembalikan data siswa yang terhapus
     } catch (error) {
         console.error("Gagal menghapus siswa:", error);
-        return new Response(
-            JSON.stringify({ error: "Gagal menghapus data" }),
+        return NextResponse.json(
+            { error: "Gagal menghapus data" },
             { status: 500 }
         );
     }
